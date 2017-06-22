@@ -73,8 +73,8 @@ class VCFparser
 		ALT = toks.nextToken();
 	    else if (index == 7) // FILTER field
 		FILTER = toks.nextToken();
-// 	    else if (index == 8) // INFO field
-// 		INFO = toks.nextToken();
+ 	    else if (index == 8) // INFO field
+ 		INFO = toks.nextToken();
 	    else if (index == 9) { // Output format
 		genotype_ind = getGenotypeIndex(toks.nextToken());
 		if (genotype_ind < 0) break;
@@ -106,8 +106,12 @@ class VCFparser
 		return null;
 	    }
 	
+  //
+  boolean INV = false;
+  if(INFO.indexOf("INV") >= 0) INV = true;
+
 	// Adjustment of first base
-	if (REF.length() > 0) {
+	if (REF.length() > 0 && !INV) {
 	    boolean same = true;
 	    for (int i = 0;i < n;i++) 
 		if (alts[i].length() == 0 ||
@@ -123,7 +127,7 @@ class VCFparser
 	}
 
 	// Adjustment of last
-	if (REF.length() > 0) {
+	if (REF.length() > 0 && !INV) {
 	    boolean same = true;
 	    int indREF = REF.length() - 1;
 	    for (int i = 0;i < n;i++) {
